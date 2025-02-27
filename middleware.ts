@@ -8,6 +8,8 @@ export async function middleware(request: NextRequest) {
   // Load the auth store from cookies
   pb.authStore.loadFromCookie(request.headers.get("cookie") || "");
 
+  console.log("pb.authStore.isValid", pb.authStore.isValid);
+
   // Refresh auth store to ensure it's valid
   try {
     if (pb.authStore.isValid) {
@@ -18,11 +20,15 @@ export async function middleware(request: NextRequest) {
   }
 
   // Redirect unauthenticated users to the login page
+  if (!pb.authStore.isValid && request.nextUrl.pathname.startsWith("/app")) {
+    return NextResponse.redirect(new URL("/auth/login", request.url));
+  }
+
   if (
-    !pb.authStore.isValid &&
-    request.nextUrl.pathname.startsWith("/protected")
+    pb.authStore.isValid &&
+    request.nextUrl.pathname.startsWith("/auth/login")
   ) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.redirect(new URL("/app", request.url));
   }
 
   // Proceed with the request
@@ -30,5 +36,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/protected/:path*"], // Define protected routes
+  matcher: ["/app/:path*", "/auth/login"], // Define protected routes
 };

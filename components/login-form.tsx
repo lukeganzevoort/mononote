@@ -169,6 +169,8 @@ function InputOTPForm({ otpId }: { otpId: string }) {
     console.log("pb.authStore.isValid", pb.authStore.isValid);
     console.log("pb.authStore.token", pb.authStore.token);
     console.log("pb.authStore.record.id", pb.authStore.record?.id);
+    document.cookie = pb.authStore.exportToCookie({ httpOnly: false });
+    window.location.href = "/app";
   }
 
   return (
