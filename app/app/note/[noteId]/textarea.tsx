@@ -25,14 +25,11 @@ export const Note = () => {
   if (loadingNoteError) return <div>Error loading note</div>;
   if (!note) return <div>Loading...</div>;
   return (
-    <div className="h-full w-full">
-      {<div className={cn(!isSaving && "opacity-0")}>Saving...</div>}
-      <TextArea
-        noteId={noteId}
-        defaultValue={note.content}
-        setIsSaving={setIsSaving}
-      />
-    </div>
+    <TextArea
+      noteId={noteId}
+      defaultValue={note.content}
+      setIsSaving={setIsSaving}
+    />
   );
 };
 const TextArea = ({
@@ -73,15 +70,24 @@ const TextArea = ({
     debouncedUpdateNote();
   }, [note]);
 
+  useEffect(() => {
+    const textarea = document.querySelector("textarea");
+    if (textarea) {
+      textarea.style.height = "auto";
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  }, [note]);
+
   return (
     <textarea
       placeholder="Add notes..."
-      className="w-full h-full bg-transparent focus-visible:outline-none focus-visible:ring-0 resize-none"
+      className="w-full h-full min-h-full p-6 bg-transparent ring-0 focus-visible:outline-none focus-visible:ring-0 resize-none overflow-hidden"
       value={note}
       onChange={(e) => {
         setNote(e.target.value);
       }}
       autoFocus
+      spellCheck
     />
   );
 };
