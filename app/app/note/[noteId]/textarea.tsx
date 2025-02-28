@@ -5,10 +5,13 @@ import pb from "@/lib/pocketbase";
 import { NotesResponse } from "@/pocketbase-types";
 import useSWR from "swr";
 import { useParams } from "next/navigation";
+import { useDebouncedCallback } from "use-debounce";
+import { cn } from "@/lib/utils";
 
 export const Note = () => {
   const params = useParams<{ noteId: string }>();
   const noteId = params.noteId === "create" ? undefined : params.noteId;
+  const [isSaving, setIsSaving] = useState(false);
 
   const { data: note, error: loadingNoteError } = useSWR(
     { note: noteId },
@@ -21,33 +24,53 @@ export const Note = () => {
 
   if (loadingNoteError) return <div>Error loading note</div>;
   if (!note) return <div>Loading...</div>;
-  return <TextArea noteId={noteId} defaultValue={note.content} />;
+  return (
+    <div className="h-full w-full">
+      {<div className={cn(!isSaving && "opacity-0")}>Saving...</div>}
+      <TextArea
+        noteId={noteId}
+        defaultValue={note.content}
+        setIsSaving={setIsSaving}
+      />
+    </div>
+  );
 };
-
 const TextArea = ({
   noteId,
   defaultValue,
+  setIsSaving,
 }: {
   noteId?: string;
   defaultValue: string;
+  setIsSaving?: (isSaving: boolean) => void;
 }) => {
   const [note, setNote] = useState(defaultValue);
+  const [isInitialRender, setIsInitialRender] = useState(true);
+
+  const debouncedUpdateNote = useDebouncedCallback(async () => {
+    try {
+      if (noteId) {
+        console.log("Updating note:", noteId);
+        const record = await pb
+          .collection("notes")
+          .update(noteId, { content: note });
+        console.log("Note updated:", record);
+      }
+    } catch (error) {
+      console.error("Error updating note:", error);
+    } finally {
+      setIsSaving?.(false);
+    }
+  }, 1000);
 
   useEffect(() => {
-    const updateNote = async () => {
-      try {
-        if (noteId) {
-          const record = await pb
-            .collection("notes")
-            .update(noteId, { content: note });
-          console.log("Note updated:", record);
-        }
-      } catch (error) {
-        console.error("Error updating note:", error);
-      }
-    };
+    if (isInitialRender) {
+      setIsInitialRender(false);
+      return;
+    }
 
-    updateNote();
+    setIsSaving?.(true);
+    debouncedUpdateNote();
   }, [note]);
 
   return (
