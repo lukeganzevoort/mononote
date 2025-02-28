@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { TextArea } from "./textarea";
+import { Note } from "./textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function NotePage() {
@@ -38,7 +38,7 @@ export default function NotePage() {
                 </CardTitle>
               </CardHeader> */}
               <CardContent className="flex-grow pt-6">
-                <TextArea defaultValue={note.content} />
+                <Note />
               </CardContent>
             </Card>
           </div>
