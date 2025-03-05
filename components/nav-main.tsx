@@ -1,12 +1,17 @@
-"use client"
+"use client";
 
-import { ChevronRight, type LucideIcon } from "lucide-react"
+import {
+  ChevronRight,
+  PlusIcon,
+  SquarePlusIcon,
+  type LucideIcon,
+} from "lucide-react";
 
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -16,25 +21,64 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
+import useSWR from "swr";
+import pb from "@/lib/pocketbase";
+import { FoldersRecord, FoldersResponse } from "@/pocketbase-types";
 
 export function NavMain({
   items,
 }: {
   items: {
-    title: string
-    url: string
-    icon?: LucideIcon
-    isActive?: boolean
+    title: string;
+    url: string;
+    icon?: LucideIcon;
+    isActive?: boolean;
     items?: {
-      title: string
-      url: string
-    }[]
-  }[]
+      title: string;
+      url: string;
+    }[];
+  }[];
 }) {
+  const { data: collections, error } = useSWR("collections", async () => {
+    const records = await pb
+      .collection("folders")
+      .getFullList<FoldersResponse>({ sort: "-created" });
+
+    console.log("collections", records);
+
+    return records;
+  });
+
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <div className="flex flex-row w-full justify-between">
+        <SidebarGroupLabel>Collections</SidebarGroupLabel>
+        <SidebarMenuButton
+          className="w-fit"
+          onClick={async () => {
+            // await pb.collection("users").authRefresh();
+            const user = pb.authStore.model?.id;
+            console.log("user", user);
+            if (!pb.authStore.isValid) {
+              // Handle unauthenticated state, e.g., redirect to login
+              console.error("User is not authenticated");
+              return;
+            }
+            if (!user) {
+              // Handle missing user
+              console.error("User is missing");
+              return;
+            }
+
+            await pb
+              .collection("folders")
+              .create({ name: "New Collection", user });
+          }}
+        >
+          <SquarePlusIcon />
+        </SidebarMenuButton>
+      </div>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible
@@ -69,5 +113,5 @@ export function NavMain({
         ))}
       </SidebarMenu>
     </SidebarGroup>
-  )
+  );
 }
