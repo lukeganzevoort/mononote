@@ -1,3 +1,5 @@
+"use client";
+
 import { AppSidebar } from "@/components/app-sidebar";
 import {
   SidebarInset,
@@ -5,6 +7,9 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { UserMenu } from "@/components/user-menu";
+import { AuthCheck } from "./auth-check";
+import { NavTop } from "@/components/nav-top";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export default function AppLayout({
   children,
@@ -12,27 +17,26 @@ export default function AppLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <header className="flex shrink-0 items-center gap-2 transition-[width,height] ease-linear">
-          <div className="flex flex-row w-full justify-between px-4 py-3">
-            <div className="flex items-center gap-2">
-              <SidebarTrigger />
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <SidebarProvider>
+        <AuthCheck />
+        <AppSidebar />
+        <SidebarInset>
+          <header className="flex shrink-0 items-center gap-2 transition-[width,height] ease-linear">
+            <div className="flex flex-row w-full justify-between px-4 py-3">
+              <NavTop />
             </div>
-            <UserMenu
-              user={{
-                name: "user",
-                email: "m@example.com",
-                avatar: "https://github.com/shadcn.png",
-              }}
-            />
+          </header>
+          <div className="flex-grow h-full w-full flex flex-col items-center">
+            {children}
           </div>
-        </header>
-        <div className="flex-grow h-full w-full flex flex-col items-center">
-          {children}
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
+        </SidebarInset>
+      </SidebarProvider>
+    </ThemeProvider>
   );
 }

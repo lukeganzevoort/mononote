@@ -32,39 +32,14 @@ export default function NotePage() {
   const range = (n: number) => Array.from({ length: n }, (_, i) => i);
 
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
-      <div className="h-screen w-screen flex flex-col font-mono overflow-auto">
-        {/* <div>Hello</div>
-        <div>Hello2</div>
-        <div className="flex-grow flex flex-col">
-          <div className="flex-grow">b</div>
-          <div className="">
-            {range(22).map((i) => (
-              <div key={i}>{i}</div>
-            ))}
-          </div>
-        </div>
-        <div>Bye</div> */}
-        <div className="relative h-14 min-h-14 w-full flex items-center justify-between px-4">
-          <span>MONO.NOTE</span>
-          <span className="absolute left-1/2 transform -translate-x-1/2 font-mono font-bold">
-            {note.title}
-          </span>
-          <ModeToggle />
-        </div>
-        <div className="flex-grow flex justify-center">
-          <Card className="my-2 mx-0 sm:mx-2 md:mx-6 w-full max-w-3xl">
-            <CardContent className="h-full p-0 flex">
-              <Note />
-            </CardContent>
-          </Card>
-        </div>
+    <div className="w-full h-full flex flex-col font-mono overflow-auto">
+      <div className="flex-grow flex justify-center">
+        <Card className="my-2 mx-0 sm:mx-2 md:mx-6 w-full max-w-3xl">
+          <CardContent className="h-full p-0 flex">
+            <Note />
+          </CardContent>
+        </Card>
       </div>
-    </ThemeProvider>
+    </div>
   );
 }

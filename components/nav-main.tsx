@@ -2,6 +2,7 @@
 
 import {
   ChevronRight,
+  NotebookTabsIcon,
   PlusIcon,
   SquarePlusIcon,
   type LucideIcon,
@@ -25,21 +26,12 @@ import {
 import useSWR from "swr";
 import pb from "@/lib/pocketbase";
 import { FoldersRecord, FoldersResponse } from "@/pocketbase-types";
+import { useParams } from "next/navigation";
 
-export function NavMain({
-  items,
-}: {
-  items: {
-    title: string;
-    url: string;
-    icon?: LucideIcon;
-    isActive?: boolean;
-    items?: {
-      title: string;
-      url: string;
-    }[];
-  }[];
-}) {
+export function NavMain() {
+  const params = useParams<{ noteId: string }>();
+  const currentNoteId = params.noteId;
+
   const { data: collections, error } = useSWR("collections", async () => {
     const records = await pb
       .collection("folders")
@@ -49,6 +41,51 @@ export function NavMain({
 
     return records;
   });
+  const { data: notes, error: notesError } = useSWR("notes", async () => {
+    const records = await pb
+      .collection("notes")
+      .getFullList({ sort: "-created" });
+
+    console.log("notes", records);
+
+    return records;
+  });
+
+  if (error) {
+    return <div>Error loading collections</div>;
+  } else if (!collections) {
+    return <div>Loading collections...</div>;
+  } else if (notesError) {
+    return <div>Error loading notes</div>;
+  } else if (!notes) {
+    return <div>Loading notes...</div>;
+  }
+
+  const currentNote = notes.find((note) => note.id === currentNoteId);
+
+  const items: {
+    id: string;
+    title: string;
+    url: string;
+    icon?: LucideIcon;
+    isActive?: boolean;
+    items?: {
+      title: string;
+      url: string;
+    }[];
+  }[] = collections.map((collection: FoldersRecord) => ({
+    id: collection.id,
+    title: collection.name,
+    url: `/collections/${collection.id}`,
+    isActive: currentNote?.folder === collection.id,
+    icon: NotebookTabsIcon,
+    items: notes
+      ?.filter((note) => note.folder === collection.id)
+      .map((note) => ({
+        title: note.title,
+        url: `/app/note/${note.id}`,
+      })),
+  }));
 
   return (
     <SidebarGroup>
@@ -82,7 +119,7 @@ export function NavMain({
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible
-            key={item.title}
+            key={item.id}
             asChild
             defaultOpen={item.isActive}
             className="group/collapsible"
