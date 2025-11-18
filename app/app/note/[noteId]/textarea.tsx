@@ -20,9 +20,16 @@ export const Note = () => {
     async () => {
       if (!noteId) return { content: "" };
       if (isDemoMode) {
-        return DEMO_NOTES.find((note) => note.id === noteId);
+        const foundNote = DEMO_NOTES.find((note) => note.id === noteId);
+        if (!foundNote) {
+          throw new Error(`Note with id ${noteId} not found`);
+        }
+        return foundNote;
       }
       const record = await pb.collection("notes").getOne<NotesResponse>(noteId);
+      if (!record) {
+        throw new Error(`Note with id ${noteId} not found`);
+      }
       return record;
     }
   );
