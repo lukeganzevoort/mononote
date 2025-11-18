@@ -1,8 +1,35 @@
+"use client";
+
 import { ModeToggle } from "./theme-toggle";
 import { SidebarTrigger } from "./ui/sidebar";
 import { UserMenu } from "./user-menu";
+import { useParams, useSearchParams } from "next/navigation";
+import useSWR from "swr";
+import pb from "@/lib/pocketbase";
+import { DEMO_NOTES } from "@/pocketbase/demo_data";
 
 export const NavTop = () => {
+  const params = useParams<{ noteId: string | undefined }>();
+  let noteTitle = "All Notes";
+  if (params.noteId) {
+    const currentNoteId = params.noteId;
+    const searchParams = useSearchParams();
+    const isDemoMode = searchParams.get("demo") === "true";
+
+    const { data: notes } = useSWR(["notes", isDemoMode], async () => {
+      if (isDemoMode) {
+        return DEMO_NOTES;
+      }
+      const records = await pb
+        .collection("notes")
+        .getFullList({ sort: "-created" });
+      return records;
+    });
+
+    const currentNote = notes?.find((note) => note.id === currentNoteId);
+    noteTitle = currentNote?.title ?? "Untitled Note";
+  }
+
   return (
     <div className="relative h-14 min-h-14 w-full flex items-center justify-between gap-4 font-mono">
       <div className="flex items-center gap-2">
@@ -10,7 +37,7 @@ export const NavTop = () => {
         {/* <span>MONO.NOTE</span> */}
       </div>
       <span className="absolute left-1/2 transform -translate-x-1/2 font-mono font-bold">
-        {"Note Title"} {/* Placeholder for note title */}
+        {noteTitle}
       </span>
       <div className="flex items-center gap-4">
         <ModeToggle />
