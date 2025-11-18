@@ -39,3 +39,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# pocketbase data (contains database and user data)
+pocketbase/pb_data/
+pocketbase/pb_data/**/*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
