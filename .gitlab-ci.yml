@@ -12,3 +12,4 @@ pages:
       - public # GitLab Pages serves everything under this folder
   only:
     - main # or whatever branch you publish from
+  pages: true
