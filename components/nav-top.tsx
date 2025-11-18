@@ -13,20 +13,20 @@ export const NavTop = () => {
   const searchParams = useSearchParams();
   const isDemoMode = searchParams.get("demo") === "true";
 
+  // Always call useSWR to maintain hook order
+  const { data: notes } = useSWR(["notes", isDemoMode], async () => {
+    if (isDemoMode) {
+      return DEMO_NOTES;
+    }
+    const records = await pb
+      .collection("notes")
+      .getFullList({ sort: "-created" });
+    return records;
+  });
+
   let noteTitle = "All Notes";
   if (params.noteId) {
     const currentNoteId = params.noteId;
-
-    const { data: notes } = useSWR(["notes", isDemoMode], async () => {
-      if (isDemoMode) {
-        return DEMO_NOTES;
-      }
-      const records = await pb
-        .collection("notes")
-        .getFullList({ sort: "-created" });
-      return records;
-    });
-
     const currentNote = notes?.find((note) => note.id === currentNoteId);
     noteTitle = currentNote?.title ?? "Untitled Note";
   }
