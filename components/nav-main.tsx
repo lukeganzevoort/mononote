@@ -26,30 +26,45 @@ import {
 import useSWR from "swr";
 import pb from "@/lib/pocketbase";
 import { FoldersRecord, FoldersResponse } from "@/pocketbase-types";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
+import { DEMO_FOLDERS, DEMO_NOTES } from "@/pocketbase/demo_data";
 
 export function NavMain() {
   const params = useParams<{ noteId: string }>();
   const currentNoteId = params.noteId;
+  const searchParams = useSearchParams();
+  const isDemoMode = searchParams.get("demo") === "true";
 
-  const { data: collections, error } = useSWR("collections", async () => {
-    const records = await pb
-      .collection("folders")
-      .getFullList<FoldersResponse>({ sort: "-created" });
+  const { data: collections, error } = useSWR(
+    ["collections", isDemoMode],
+    async () => {
+      if (isDemoMode) {
+        return DEMO_FOLDERS;
+      }
+      const records = await pb
+        .collection("folders")
+        .getFullList<FoldersResponse>({ sort: "-created" });
 
-    console.log("collections", records);
+      console.log("collections", records);
 
-    return records;
-  });
-  const { data: notes, error: notesError } = useSWR("notes", async () => {
-    const records = await pb
-      .collection("notes")
-      .getFullList({ sort: "-created" });
+      return records;
+    }
+  );
+  const { data: notes, error: notesError } = useSWR(
+    ["notes", isDemoMode],
+    async () => {
+      if (isDemoMode) {
+        return DEMO_NOTES;
+      }
+      const records = await pb
+        .collection("notes")
+        .getFullList({ sort: "-created" });
 
-    console.log("notes", records);
+      console.log("notes", records);
 
-    return records;
-  });
+      return records;
+    }
+  );
 
   if (error) {
     return <div>Error loading collections</div>;
@@ -94,6 +109,9 @@ export function NavMain() {
         <SidebarMenuButton
           className="w-fit"
           onClick={async () => {
+            if (isDemoMode) {
+              return;
+            }
             // await pb.collection("users").authRefresh();
             const user = pb.authStore.model?.id;
             console.log("user", user);
@@ -137,7 +155,9 @@ export function NavMain() {
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild>
-                        <a href={subItem.url}>
+                        <a
+                          href={subItem.url + (isDemoMode ? "?demo=true" : "")}
+                        >
                           <span>{subItem.title}</span>
                         </a>
                       </SidebarMenuSubButton>

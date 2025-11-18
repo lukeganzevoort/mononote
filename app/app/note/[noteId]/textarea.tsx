@@ -4,19 +4,24 @@ import { useEffect, useState } from "react";
 import pb from "@/lib/pocketbase";
 import { NotesResponse } from "@/pocketbase-types";
 import useSWR from "swr";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
-import { cn } from "@/lib/utils";
+import { DEMO_NOTES } from "@/pocketbase/demo_data";
 
 export const Note = () => {
   const params = useParams<{ noteId: string }>();
   const noteId = params.noteId === "create" ? undefined : params.noteId;
   const [isSaving, setIsSaving] = useState(false);
+  const searchParams = useSearchParams();
+  const isDemoMode = searchParams.get("demo") === "true";
 
   const { data: note, error: loadingNoteError } = useSWR(
-    { note: noteId },
+    ["note", noteId, isDemoMode],
     async () => {
       if (!noteId) return { content: "" };
+      if (isDemoMode) {
+        return DEMO_NOTES.find((note) => note.id === noteId);
+      }
       const record = await pb.collection("notes").getOne<NotesResponse>(noteId);
       return record;
     }
@@ -43,10 +48,11 @@ const TextArea = ({
 }) => {
   const [note, setNote] = useState(defaultValue);
   const [isInitialRender, setIsInitialRender] = useState(true);
-
+  const searchParams = useSearchParams();
+  const isDemoMode = searchParams.get("demo") === "true";
   const debouncedUpdateNote = useDebouncedCallback(async () => {
     try {
-      if (noteId) {
+      if (noteId && !isDemoMode) {
         console.log("Updating note:", noteId);
         const record = await pb
           .collection("notes")

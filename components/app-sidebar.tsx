@@ -24,12 +24,15 @@ import {
   SidebarMenuButton,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { useSearchParams } from "next/navigation";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const searchParams = useSearchParams();
+  const isDemoMode = searchParams.get("demo") === "true";
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="mb-1">
-        <a href="/app">
+        <a href={`/app${isDemoMode ? "?demo=true" : ""}`}>
           <SidebarMenuButton
             size="lg"
             className="bg-accent text-bg-accent-foreground"
