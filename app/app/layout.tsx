@@ -30,6 +30,21 @@ export default function AppLayout({
         {isDemoMode ? null : <AuthCheck />}
         <AppSidebar />
         <SidebarInset>
+          {isDemoMode && (
+            <div className="bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 border-b border-blue-500/20">
+              <div className="flex items-center justify-center px-4 py-2.5 gap-2">
+                <span className="text-sm font-medium text-foreground">
+                  🎨 Demo Mode - Try out Mononote! Changes won't be saved.
+                </span>
+                <a
+                  href="/auth/signup"
+                  className="text-sm font-semibold text-primary hover:underline"
+                >
+                  {/* Sign up to save your notes */}
+                </a>
+              </div>
+            </div>
+          )}
           <header className="flex shrink-0 items-center gap-2 transition-[width,height] ease-linear">
             <div className="flex flex-row w-full justify-between px-4 py-3">
               <NavTop />

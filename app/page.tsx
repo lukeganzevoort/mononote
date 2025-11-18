@@ -1,5 +1,13 @@
 import Link from "next/link";
-import { FileText, FolderOpen, Sparkles, Shield, Zap, Moon } from "lucide-react";
+import {
+  FileText,
+  FolderOpen,
+  Sparkles,
+  Shield,
+  Zap,
+  Moon,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
@@ -8,7 +16,8 @@ export default function Home() {
       <div className="bg-amber-500/10 border-b border-amber-500/20">
         <div className="container mx-auto px-4 py-3 text-center">
           <p className="text-sm font-medium text-amber-600 dark:text-amber-500">
-            ⚠️ Alpha Version - This application is currently in development and not ready for public use
+            ⚠️ Alpha Version - This application is currently in development and
+            not ready for public use
           </p>
         </div>
       </div>
@@ -35,11 +44,19 @@ export default function Home() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
             <Link
-              href="/auth/signup"
-              className="inline-flex items-center justify-center rounded-lg bg-primary px-8 py-3 text-base font-medium text-primary-foreground shadow-lg hover:bg-primary/90 transition-all hover:scale-105"
+              href="/app?demo=true"
+              className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-primary to-primary/80 px-8 py-3 text-base font-medium text-primary-foreground shadow-lg hover:shadow-xl transition-all hover:scale-105"
+            >
+              <Sparkles className="mr-2 h-5 w-5" />
+              Try Demo
+            </Link>
+            <Button
+              disabled={true}
+              // href="/auth/signup"
+              className="inline-flex items-center justify-center rounded-lg bg-primary px-8 py-8 text-base font-medium text-primary-foreground shadow-lg hover:bg-primary/90 transition-all hover:scale-105"
             >
               Get Started
-            </Link>
+            </Button>
             <Link
               href="/auth/login"
               className="inline-flex items-center justify-center rounded-lg border border-input bg-background px-8 py-3 text-base font-medium hover:bg-accent hover:text-accent-foreground transition-all"
@@ -85,7 +102,9 @@ export default function Home() {
 
         {/* Tech Stack Section */}
         <div className="max-w-4xl mx-auto pt-16 pb-8 text-center space-y-4">
-          <h2 className="text-2xl sm:text-3xl font-semibold">Built with Modern Technology</h2>
+          <h2 className="text-2xl sm:text-3xl font-semibold">
+            Built with Modern Technology
+          </h2>
           <p className="text-muted-foreground">
             Powered by Next.js 15, React 19, PocketBase, and Tailwind CSS
           </p>

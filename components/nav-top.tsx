@@ -10,11 +10,12 @@ import { DEMO_NOTES } from "@/pocketbase/demo_data";
 
 export const NavTop = () => {
   const params = useParams<{ noteId: string | undefined }>();
+  const searchParams = useSearchParams();
+  const isDemoMode = searchParams.get("demo") === "true";
+
   let noteTitle = "All Notes";
   if (params.noteId) {
     const currentNoteId = params.noteId;
-    const searchParams = useSearchParams();
-    const isDemoMode = searchParams.get("demo") === "true";
 
     const { data: notes } = useSWR(["notes", isDemoMode], async () => {
       if (isDemoMode) {
@@ -41,13 +42,19 @@ export const NavTop = () => {
       </span>
       <div className="flex items-center gap-4">
         <ModeToggle />
-        <UserMenu
-          user={{
-            name: "user",
-            email: "m@example.com",
-            avatar: "https://github.com/shadcn.png",
-          }}
-        />
+        {isDemoMode ? (
+          <div className="flex items-center gap-2 text-sm text-muted-foreground font-mono">
+            <span>Demo User</span>
+          </div>
+        ) : (
+          <UserMenu
+            user={{
+              name: "user",
+              email: "m@example.com",
+              avatar: "https://github.com/shadcn.png",
+            }}
+          />
+        )}
       </div>
     </div>
   );
