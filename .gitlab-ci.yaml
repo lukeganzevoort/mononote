@@ -1,0 +1,13 @@
+image: alpine:latest # lightweight base image
+
+pages:
+  stage: deploy
+  script:
+    - echo "Building site…" # replace with real build steps if needed
+    - npm run build
+    - mv out public
+  artifacts:
+    paths:
+      - public # GitLab Pages serves everything under this folder
+  only:
+    - main # or whatever branch you publish from
