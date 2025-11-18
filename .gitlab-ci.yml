@@ -1,4 +1,4 @@
-image: alpine:latest # lightweight base image
+image: node:latest # lightweight base image
 
 pages:
   stage: deploy
