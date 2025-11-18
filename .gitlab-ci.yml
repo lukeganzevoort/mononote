@@ -3,7 +3,8 @@ image: node:latest # lightweight base image
 pages:
   stage: deploy
   script:
-    - echo "Building site…" # replace with real build steps if needed
+    - echo "Building site…"
+    - npm install
     - npm run build
     - mv out public
   artifacts:
