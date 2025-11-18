@@ -10,12 +10,15 @@ import { UserMenu } from "@/components/user-menu";
 import { AuthCheck } from "./auth-check";
 import { NavTop } from "@/components/nav-top";
 import { ThemeProvider } from "@/components/theme-provider";
+import { useSearchParams } from "next/navigation";
 
 export default function AppLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const searchParams = useSearchParams();
+  const isDemoMode = searchParams.get("demo") === "true";
   return (
     <ThemeProvider
       attribute="class"
@@ -24,7 +27,7 @@ export default function AppLayout({
       disableTransitionOnChange
     >
       <SidebarProvider>
-        <AuthCheck />
+        {isDemoMode ? null : <AuthCheck />}
         <AppSidebar />
         <SidebarInset>
           <header className="flex shrink-0 items-center gap-2 transition-[width,height] ease-linear">
