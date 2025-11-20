@@ -12,6 +12,7 @@ import { NavTop } from "@/components/nav-top";
 import { ThemeProvider } from "@/components/theme-provider";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import Link from "next/link";
 
 function LayoutContent({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
@@ -28,12 +29,12 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
               <span className="text-sm font-medium text-foreground">
                 🎨 Demo Mode - Try out Mononote! Changes won't be saved.
               </span>
-              <a
+              <Link
                 href="/auth/signup"
                 className="text-sm font-semibold text-primary hover:underline"
               >
                 {/* Sign up to save your notes */}
-              </a>
+              </Link>
             </div>
           </div>
         )}

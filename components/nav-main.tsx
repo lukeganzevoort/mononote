@@ -28,6 +28,7 @@ import pb from "@/lib/pocketbase";
 import { FoldersRecord, FoldersResponse } from "@/pocketbase-types";
 import { useParams, useSearchParams } from "next/navigation";
 import { DEMO_FOLDERS, DEMO_NOTES } from "@/pocketbase/demo_data";
+import Link from "next/link";
 
 export function NavMain() {
   const params = useParams<{ noteId: string }>();
@@ -155,9 +156,9 @@ export function NavMain() {
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild>
-                        <a href={subItem.url}>
+                        <Link href={subItem.url}>
                           <span>{subItem.title}</span>
-                        </a>
+                        </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   ))}

@@ -50,13 +50,13 @@ export default function Home() {
               <Sparkles className="mr-2 h-5 w-5" />
               Try Demo
             </Link>
-            <Button
+            {/* <Button
               disabled={true}
               // href="/auth/signup"
               className="inline-flex items-center justify-center rounded-lg bg-primary px-8 py-8 text-base font-medium text-primary-foreground shadow-lg hover:bg-primary/90 transition-all hover:scale-105"
             >
               Get Started
-            </Button>
+            </Button> */}
             <Link
               href="/auth/login"
               className="inline-flex items-center justify-center rounded-lg border border-input bg-background px-8 py-3 text-base font-medium hover:bg-accent hover:text-accent-foreground transition-all"
