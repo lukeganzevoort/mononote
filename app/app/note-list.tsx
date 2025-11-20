@@ -66,7 +66,14 @@ export const NoteList = () => {
             {data.length} {data.length === 1 ? "note" : "notes"}
           </p>
         </div>
-        <Link href={`/app/note/create${isDemoMode ? "?demo=true" : ""}`}>
+        <Link
+          href={{
+            pathname: "/app/note",
+            query: {
+              ...(isDemoMode ? { demo: "true" } : {}),
+            },
+          }}
+        >
           <Button className="gap-2 font-mono">
             <PlusIcon className="h-4 w-4" />
             New Note
@@ -79,7 +86,13 @@ export const NoteList = () => {
           {data.map((note) => (
             <Link
               key={note.id}
-              href={`/app/note/${note.id}${isDemoMode ? "?demo=true" : ""}`}
+              href={{
+                pathname: "/app/note",
+                query: {
+                  id: note.id,
+                  ...(isDemoMode ? { demo: "true" } : {}),
+                },
+              }}
             >
               <Card className="h-full transition-all hover:shadow-lg hover:border-primary/50 cursor-pointer">
                 <CardHeader className="pb-3">

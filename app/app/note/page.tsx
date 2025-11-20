@@ -2,14 +2,6 @@ import { Suspense } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Note } from "./textarea";
 
-export async function generateStaticParams() {
-  return [
-    {
-      noteId: "create",
-    },
-  ];
-}
-
 export default function NotePage() {
   return (
     <div className="w-full h-full flex flex-col font-mono overflow-auto">
@@ -25,3 +17,4 @@ export default function NotePage() {
     </div>
   );
 }
+

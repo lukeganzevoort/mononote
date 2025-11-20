@@ -98,7 +98,7 @@ export function NavMain() {
       ?.filter((note) => note.folder === collection.id)
       .map((note) => ({
         title: note.title,
-        url: `/app/note/${note.id}`,
+        url: `/app/note?id=${note.id}&${isDemoMode ? "demo=true" : ""}`,
       })),
   }));
 
@@ -155,9 +155,7 @@ export function NavMain() {
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild>
-                        <a
-                          href={subItem.url + (isDemoMode ? "?demo=true" : "")}
-                        >
+                        <a href={subItem.url}>
                           <span>{subItem.title}</span>
                         </a>
                       </SidebarMenuSubButton>
