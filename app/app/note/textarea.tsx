@@ -4,15 +4,15 @@ import { useEffect, useState } from "react";
 import pb from "@/lib/pocketbase";
 import { NotesResponse } from "@/pocketbase-types";
 import useSWR from "swr";
-import { useParams, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import { DEMO_NOTES } from "@/pocketbase/demo_data";
 
 export const Note = () => {
-  const params = useParams<{ noteId: string }>();
-  const noteId = params.noteId === "create" ? undefined : params.noteId;
-  const [isSaving, setIsSaving] = useState(false);
   const searchParams = useSearchParams();
+  const noteIdParam = searchParams.get("id");
+  const noteId = noteIdParam === "create" ? undefined : noteIdParam ?? undefined;
+  const [isSaving, setIsSaving] = useState(false);
   const isDemoMode = searchParams.get("demo") === "true";
 
   const { data: note, error: loadingNoteError } = useSWR(
@@ -104,3 +104,4 @@ const TextArea = ({
     />
   );
 };
+
