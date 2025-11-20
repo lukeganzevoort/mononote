@@ -24,6 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import Link from "next/link";
 
 const formSchema = z.object({
   email: z
@@ -130,13 +131,13 @@ export function LoginForm({
       <div className="text-center text-sm">
         {isSignUp ? "Already have an account? " : "Don't have an account? "}
         {isSignUp ? (
-          <a href="login" className="underline underline-offset-4">
+          <Link href="login" className="underline underline-offset-4">
             Login
-          </a>
+          </Link>
         ) : (
-          <a href="signup" className="underline underline-offset-4">
+          <Link href="signup" className="underline underline-offset-4">
             Sign up
-          </a>
+          </Link>
         )}
       </div>
     </form>

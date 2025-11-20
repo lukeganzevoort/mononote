@@ -25,6 +25,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const searchParams = useSearchParams();
@@ -32,7 +33,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="mb-1">
-        <a href={`/app${isDemoMode ? "?demo=true" : ""}`}>
+        <Link href={`/app${isDemoMode ? "?demo=true" : ""}`}>
           <SidebarMenuButton
             size="lg"
             className="bg-accent text-bg-accent-foreground"
@@ -45,7 +46,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <NotebookPenIcon className="size-6" />
             </div>
           </SidebarMenuButton>
-        </a>
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <NavMain />
