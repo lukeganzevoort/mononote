@@ -6,7 +6,7 @@ pages:
     - echo "Building site…"
     - npm install
     - npm run build
-    - mv out public
+    - mv out/* public/
   artifacts:
     paths:
       - public # GitLab Pages serves everything under this folder
