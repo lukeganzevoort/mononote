@@ -1,6 +1,14 @@
 # Mononote
 
-A modern, minimalist note-taking application built with Next.js and PocketBase. Mononote provides a clean, distraction-free interface for organizing your thoughts with support for folders, real-time syncing, and a beautiful dark mode.
+A modern, minimalist note-taking application built with Next.js and PocketBase. Mononote provides a clean, distraction-free interface for organizing your thoughts with support for folders and real-time syncing. The website is built completely static and hosted on GitHub Pages, enabled by PocketBase being used as a backend-as-a-service.
+
+The name "Mononote" comes from the simplistic monofont used in the note editor. The goal is to keep the interface minimal and focused on the notes themselves so the user doesn't get distracted by the UI or formatting options.
+
+NOTE: This webapp is not open to the public yet. But the demo is available to try out.
+
+## Demo
+
+Check out the live demo: **[https://lukeganzevoort.github.io/mononote/](https://lukeganzevoort.github.io/mononote/)**
 
 ## Features
 
@@ -23,7 +31,7 @@ A modern, minimalist note-taking application built with Next.js and PocketBase. 
 
 ## Prerequisites
 
-- Node.js 20+ 
+- Node.js 20+
 - Docker (for running PocketBase)
 - npm, yarn, pnpm, or bun
 
@@ -56,8 +64,9 @@ cd pocketbase
 ```
 
 PocketBase will be available at:
+
 - **API**: http://localhost:8090
-- **Admin UI**: http://localhost:8090/_/
+- **Admin UI**: http://localhost:8090/\_/
 
 ### 4. Run the Development Server
 
@@ -127,9 +136,7 @@ Update `lib/pocketbase.ts` to use this environment variable instead of the hardc
 
 ### Deploy the Next.js Frontend
 
-The easiest way to deploy the Next.js app is using [Vercel](https://vercel.com):
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
+The website is built completely static and hosted on GitHub Pages, enabled by PocketBase being used as a backend-as-a-service. The website is deployed automatically when the `main` branch is pushed to GitHub.
 
 ### Deploy PocketBase Backend
 
